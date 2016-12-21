@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+	<title>低配版节奏大师</title>
+	<style>
+		*{
+			margin: 0;
+			padding: 0;
+			font-family: "microsoft yahei";
+		}
+		body{
+			background: #887ddd;
+			background-size: cover;
+		}
+		.info{
+			color: #fff;
+			font-size:20px;
+			line-height: 30px;
+			position: absolute;
+			margin:200px 50px;
+			width: 350px;
+		}
+		.footer{
+			font-size: 30px;
+			color: #fff;
+			margin: 20px;
+			text-align: center;
+		}
+		div{
+			box-sizing: border-box;
+		}
+	 	#main{
+			background: #000;
+			background-size: cover;
+			width: 500px;
+			height: 500px;
+			margin: 10px auto;
+			padding: 10px 20px;
+			position: relative;
+			overflow: hidden;
+			text-align: center;
+		}
+		#mask{
+			z-index: 998;
+			background: grey;
+			width: 500px;
+			height: 500px;
+			position: absolute;
+			top: 0;
+			left: 0;
+		}
+		#set{
+			width: 300px;
+			height: 300px;
+			background: #fff;
+			position: absolute;
+			top:50%;
+			left: 50%;
+			margin:-150px auto 0 -150px;
+			padding: 20px;
+		}
+		#set div{
+			cursor: pointer;
+			font-size: 40px;
+			height: 50px;
+			line-height: 50px;
+			margin: 20px;
+			border: 1px solid red;
+		}
+		#set div:hover{
+			background: greenyellow;
+		}
+		.brack_cont{
+			float: left;
+			width: 100px;
+			height: 480px;
+			border-left: 2px solid #fff;
+			border-right: 2px solid #fff;
+		}
+		.brack_cont:nth-child(3),.brack_cont:nth-child(4){
+			margin: 0 15px;
+		}
+		.btn:nth-child(2),.btn:nth-child(3){
+			margin: 0 15px;
+		}
+		.brack{
+			width: 96px;
+			height: 50px;
+			background: #00FFFF;
+			position: absolute;
+			top: 0;
+			margin-right: 20px;
+			box-shadow: 0px -5px 10px white;
+		}
+		.btns_cont{
+			position: absolute;
+			bottom: 0;
+			background: none;
+			margin: 0 auto;
+			width: 480px;
+			height: 50px;
+			text-align: center;
+		}
+		.btn{
+			float: left;
+			color: #fff;
+			font-size: 2rem;
+			cursor: pointer;
+			line-height: 45px;
+			width: 100px;
+			height: 50px;
+			background: #0044BB;
+			position: relative;
+		}
+		#scoreBar{
+			width: 500px;
+			height: 50px;
+			border: 1px solid red;
+			text-align: center;
+			margin: 0 auto;
+			font-size: 2rem;
+			line-height: 45px;
+			background:#ECF095;
+			background-size: cover;
+		}
+	/*	正确效果*/
+	.rightShine{
+		animation:mysecond 0.1s;
+	-webkit-animation:mysecond 0.1s; /* Safari and Chrome */
+	}
+
+	@keyframes mysecond
+	{
+		from {background:none;}
+		to {background:yellowgreen;}
+	}
+
+	@-webkit-keyframes mysecond /* Safari and Chrome */
+	{
+		from {background:none;}
+		to {background:yellowgreen;}
+	}
+	/*	错误动画*/
+		.wrongShine{
+		animation:myfirst 0.1s;
+		-webkit-animation:myfirst 0.1s; /* Safari and Chrome */
+		}
+
+	@keyframes myfirst
+	{
+		from {background:none;}
+		to {background:red;}
+	}
+
+	@-webkit-keyframes myfirst /* Safari and Chrome */
+	{
+		from {background:none;}
+		to {background:red;}
+	}
+		
+	</style>
+</head>
+<body>
+	<div class="info">
+		<h3>1→使用键盘上的Q W E R键操作</h3>
+		<h3>2→当方块下落到键位块时按下对应键位即可加1分</h3>
+		<h3>3→分数低至-10分时游戏结束</h3>
+		<h3>4→发现bug的话就假装没看到</h3>
+	</div>
+	<div id="main">
+		<div id="mask">
+		<div id="set">
+			<h2>速度设置</h2>
+			<div>1(新手)</div>
+			<div>2(推荐)</div>
+			<div>3(大师)</div>
+		</div>
+		</div>
+		<div class="brack_cont"></div>
+		<div class="brack_cont"></div>
+		<div class="brack_cont"></div>
+		<div class="brack_cont"></div>
+		<div class="btns_cont">
+			<div id="Q" class="btn">Q</div>
+			<div id="W" class="btn">W</div>
+			<div id="E" class="btn">E</div>
+			<div id="R" class="btn">R</div>
+		</div>
+	</div>
+	<div id="scoreBar">
+		<h3>得分   <span id="score">0</span></h3>
+	</div>
+	<div class="footer">Powered by 白卓</div>
+	<script>
+window.onload = function(){
+		//初始化
+		var speed = 0;
+		var score = document.getElementById('score');
+		var brack_cont = document.getElementsByClassName('brack_cont');
+		var scoreTips = document.getElementsByClassName('scoreTip');
+		var btns = document.getElementsByClassName('btn');
+		//按键
+      document.onkeydown=function(event){
+            var e = event || window.event || arguments.callee.caller.arguments[0];
+            if(e && e.keyCode==81){ 
+				changeScore(0);
+              }
+            if(e && e.keyCode==87){ 
+				changeScore(1);
+               }            
+             if(e && e.keyCode==69){ 
+				 changeScore(2);
+            }
+		   if(e && e.keyCode==82){ 
+			   	changeScore(3);
+            }
+        }
+	  //按按钮
+	  for(i=0,len=btns.length;i<len;i++){
+		  btns[i].onclick = changeScore.bind(null,i);
+	  }
+	  //分数变化
+	  function changeScore(x){
+		if(brack_cont[x].firstChild){
+			var bottomBrack =   brack_cont[x].firstChild;
+			var ifTop = parseInt(bottomBrack.style.top);
+			if(ifTop && ifTop >= 395){
+					Pscore(x);
+				}
+				else{
+					Mscore(x);
+				}
+		}
+		else{
+					Mscore(x);
+		}
+	  }
+		
+		//加分
+		function Pscore(CI){
+			brack_cont[CI].classList.add('rightShine');
+			brack_cont[CI].addEventListener("animationend", function() {
+    		brack_cont[CI].classList.remove('rightShine');
+  			}, false);
+			var cScore = parseInt(document.getElementById('score').innerHTML);
+			cScore += 1;
+			score.innerHTML = cScore;
+		}
+		//扣分
+		function Mscore(CI){
+			brack_cont[CI].classList.add('wrongShine');
+			brack_cont[CI].addEventListener("animationend", function() {
+    		brack_cont[CI].classList.remove('wrongShine');
+  			}, false);
+			var cScore = parseInt(document.getElementById('score').innerHTML);
+			if(cScore ==-9){
+				alert("游戏结束,点击确定重新开始");
+				window.location.reload();
+			}
+			else{
+			cScore -= 1;
+			score.innerHTML = cScore;
+			}
+		}
+	  //设置
+	  var mask = document.getElementById('mask');
+	  var set = document.getElementById('set');
+	  var speedBtns = set.getElementsByTagName('div');
+		for(i=0,len=speedBtns.length;i<len;i++){
+			speedBtns[i].onclick = speedSet.bind(null,i);
+		}
+		
+		//设置速度
+		function speedSet(e){
+			set.style.display = "none";
+			mask.style.display = "none";
+			speed = e + 1;
+			drop(speed);
+		}
+		//下落
+		var dropLine = document.getElementsByClassName('brack_cont');
+		function drop(s){
+			//创建方块
+			var dropTimer = setInterval(function(){
+				var nBrack = document.createElement('div');
+				var brackMount = document.getElementsByClassName('brack');
+				nBrack.className = "brack";
+				var randomX = Math.floor(Math.random()*4)
+				dropLine[randomX].appendChild(nBrack);
+				//开始下落
+					var startTImer = setInterval(function(){
+					var oStyle = window.getComputedStyle(nBrack, null);
+					cTop=parseInt(oStyle.top);
+					if(cTop >= 490){
+						dropLine[randomX].removeChild(nBrack);
+						return;
+					}
+					else{
+					nBrack.style.top = cTop + 20 + 'px';
+					}
+					},100 / s)
+			},1000 / s)
+		}
+}
+</script>
+</body>
+</html>
