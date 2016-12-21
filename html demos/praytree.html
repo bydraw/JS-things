@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="cn">
+
+<head>
+  <meta charset="UTF-8">
+  <title>许愿树</title>
+  <style>
+    body {
+      background: black;
+            		overflow: hidden;
+    }
+
+    * {
+      font-family: 'microsoft yahei';
+      margin: 0;
+      padding: 0;
+
+    }
+
+    .main {
+      width: 600px;
+      height: 550px;
+      margin: 50px auto;
+    }
+
+    .tree {
+      width: 600px;
+      height: 550px;
+      position: absolute;
+      background-image: url(../img/sds.png);
+      background-repeat: no-repeat;
+      background-size: contain;
+      z-index: -2;
+    }
+
+    .praypaper {
+      background-image: url(../img/old.png);
+      background-size: cover;
+      ;
+      background-repeat: no-repeat;
+      margin: 0 6.5%;
+      width: 440px;
+      height: 580px;
+      position: absolute;
+      opacity: 0;
+      filter: opacity(0);
+      transition: opacity 2s, filter 2s;
+    }
+
+    .box {
+      background-image: url(../img/ball.png);
+      background-size: contain;
+      border-radius: 50%;
+      width: 50px;
+      height: 50px;
+      float: left;
+      margin: 5px;
+      background-color: #fff;
+      opacity: 0.2;
+      filter: opacity(20);
+      cursor: pointer;
+    }
+
+    .box:hover {
+      opacity: 0.7;
+      filter: opacity(70);
+    }
+
+    .one {
+      height: 70px;
+      width: 65px;
+      margin: 0 auto;
+    }
+
+    .twocontainer {
+      height: 70px;
+      width: 188px;
+      margin: 0 auto;
+    }
+
+    .threecontainer {
+      height: 70px;
+      width: 310px;
+      margin: 0 auto;
+    }
+
+    .fourcontainer {
+      height: 70px;
+      width: 370px;
+      margin: 0 auto;
+    }
+
+    .fivecontainer {
+      height: 70px;
+      width: 426px;
+      margin: 0 auto;
+    }
+
+    .sixcontainer {
+      height: 200px;
+      width: 65px;
+      margin: 0 auto;
+    }
+
+    .hvd {
+      background-color: #ddd;
+    }
+
+    .sltd {
+      background-color: yellow;
+      box-shadow: 5px -10px 10px yellow;
+      opacity: 1;
+      filter: opacity(100);
+    }
+
+    .main h3 {
+      margin: 5px auto;
+      text-align: center;
+      color: yellowgreen;
+    }
+
+    #pray {
+      width: 80px;
+      height: 30px;
+      font: 18px/30px bold;
+      background-color: yellowgreen;
+      margin: 0 auto;
+      text-align: center;
+      cursor: pointer;
+    }
+
+    #pray:hover {
+      background-color: red;
+    }
+
+    #prayword {
+      line-height: 30px;
+      width: 280px;
+      height: 155px;
+      padding: 20px;
+      position: absolute;
+      left: 60px;
+      bottom: 20px;
+    }
+  </style>
+  <script src="http://cdn.bootcss.com/jquery/3.1.1/jquery.min.js"></script>
+</head>
+
+<body>
+  <div class="main">
+    <div class="tree"></div>
+    <div class="praypaper" id="praypaper">
+      <div class="prayword">
+        <h3 id="prayword">这里是祝福语</h3>
+      </div>
+    </div>
+    <div class="balls" id="balls">
+      <div class="one">
+        <div class="box"></div>
+      </div>
+      <div class="twocontainer">
+        <div class="box"></div>
+        <div class="box"></div>
+        <div class="box"></div>
+      </div>
+      <div class="threecontainer">
+        <div class="box"></div>
+        <div class="box"></div>
+        <div class="box"></div>
+        <div class="box"></div>
+        <div class="box"></div>
+      </div>
+      <div class="fourcontainer">
+        <div class="box"></div>
+        <div class="box"></div>
+        <div class="box"></div>
+        <div class="box"></div>
+        <div class="box"></div>
+        <div class="box"></div>
+      </div>
+      <div class="fivecontainer">
+        <div class="box"></div>
+        <div class="box"></div>
+        <div class="box"></div>
+        <div class="box"></div>
+        <div class="box"></div>
+        <div class="box"></div>
+        <div class="box"></div>
+
+      </div>
+      <div class="sixcontainer">
+        <div class="box"></div>
+        <div class="box"></div>
+        <div class="box"></div>
+      </div>
+    </div>
+    <h3>请点亮一定数目的许愿灯后，点击许愿按钮</h3>
+    <div id="pray">许愿</div>
+  </div>
+  <script>
+    var minSize = 20;//雪花最小的尺寸
+    var maxSize = 30; //雪花最大的尺寸
+    var newOn = 100;//时隔多长时间产生一个雪花，值越小，雪越大
+    var flake =$("<div></div>").css({"position":"absolute","cursor":"none"}).html("❄");//雪花
+    $(function(){
+      setInterval(function(){
+        var wWidth = $(document).width();//浏览器的宽度
+        var wHight = $(document).height();//浏览器的高度
+        var startLeft =Math.random()*wWidth;//雪花一开始距离浏览器的间距
+        var endLeft =Math.random()*wWidth;//雪花一下落后距离浏览器的间距
+        var flakeSize =minSize + maxSize*Math.random();//雪花的大小
+        var flakeOpacity=0.7 + Math.random()*0.3;//雪花开始时的透明度
+        var flakeEndOpacity=0.5+Math.random()*0.3;//雪花下落后的透明度
+        var durationTime = 2000 * Math.random()+ 10*wHight;//雪花下落的时间
+        flake.clone().appendTo($("body")).css({
+          "left":startLeft,
+          "font-size":flakeSize,
+          "opacity":flakeOpacity,
+          "color":"#FFF",
+          "top":"-55px"
+        }).animate({
+          "left":endLeft,
+          "opacity":flakeEndOpacity,
+          "top":wHight
+        },durationTime,function(){
+          $(this).remove();
+        });
+      },newOn);
+    })
+
+
+var ds = document.getElementsByClassName('box');
+var prayBtn = document.getElementById('pray');
+var prayWord = document.getElementById('prayword');
+var ln  = 0;
+var lnpre = -1;
+var alltime = 0;
+var lindex;
+function shine(){
+    if(ln>=25){
+      if(alltime==0){
+      ds[24].className="box";
+      for (var i = 0; i < ds.length; i++) {
+        ds[i].style.backgroundImage="url(../img/ball2.png)";
+      }
+      ln = 0;
+      lnpre = -1;
+      alltime = 1;
+      return;
+    }
+    if(alltime==1){
+      ds[24].className="box";
+      for (var i = 0; i < ds.length; i++) {
+        ds[i].style.backgroundImage="url(../img/ball3.png)";
+      }
+      ln = 0;
+      lnpre = -1;
+      alltime = 2;
+      return;
+    }
+    if(alltime==2){
+      ds[24].className="box";
+      for (var i = 0; i < ds.length; i++) {
+        ds[i].style.backgroundImage="url(../img/ball.png)";
+      }
+      ln = 0;
+      lnpre = -1;
+      alltime = 0;
+      return;
+    }
+  }
+    ds[ln].className="box sltd";
+    ln++;
+    if(lnpre>=0){
+      ds[lnpre].className="box";
+    }
+    lnpre++;
+  }
+var shineTimer = setInterval(shine,100)
+prayBtn.onclick=pray;
+ for (var i = 0; i < ds.length; i++) {
+    ds[i].onclick=changeColorOC;
+  }
+  function changeColorOC(){
+    clearInterval(shineTimer);
+    if(this.className=="box stld"){
+      this.className="box";
+      return;
+    }
+    this.className="box sltd";
+  }
+  function pray(){
+    showPresent();
+    praypaper.style.opacity="1";
+    praypaper.style.filter="opacity(100)"
+  var sltdnum = document.getElementsByClassName('sltd');
+  if(sltdnum.length==1){
+    prayWord.innerHTML="你虽然只点亮了一盏灯<br>却抓住了闪烁的那颗星<br>追逐吧<br>你的机遇就在不经意间";
+  }
+  else if(sltdnum.length==2){
+    prayWord.innerHTML="你点亮了两盏灯<br>一盏叫幸运<br>一盏叫晚安";
+  }
+  else if(sltdnum.length>2&&sltdnum.length<25){
+    prayWord.innerHTML="你点亮了"+sltdnum.length+"盏灯"+"<br>这将是你的幸运数字"+"<br>祝你好运"
+  }
+  else if(sltdnum.length>=25){
+    prayWord.innerHTML="你点亮了所有许愿灯<br>你很耐心<br>也很贪心<br>学会舍得，方成大器";
+  }
+
+}
+function showPresent(){
+    var sltdnum = document.getElementsByClassName('sltd');
+    document.getElementById('balls').style.visibility="hidden";
+}
+</script>
+
+</body>
+
+</html>
