@@ -6,3 +6,9 @@ function getAllStyles(element) {
     }
     return styles;
 }
+//will return like 
+//...
+//width:100px
+//...
+//height:100px
+//...
