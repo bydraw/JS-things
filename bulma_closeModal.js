@@ -1,4 +1,4 @@
-//close modals anywhere by clicking cancel or X 
+//close modals of BULMA anywhere by clicking cancel or X 
 const modals = document.getElementsByClassName('modal');
 const modals_cancels = document.querySelectorAll("a[class='button']");
 const modals_deletes = document.querySelectorAll("button[class='delete']");
