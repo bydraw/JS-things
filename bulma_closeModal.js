@@ -10,7 +10,5 @@ for (let i = 0; i < modals_deletes.length; i++) {
     modals_close.push(modals_deletes[i]);
 }
 for (let i = 0; i < modals_close.length; i++) {
-    modals_close[i].onclick = function () {
-        this.parentNode.parentNode.parentNode.classList.remove('is-active');
-    }
+    modals_close[i].onclick = () => this.parentNode.parentNode.parentNode.classList.remove('is-active');
 }
