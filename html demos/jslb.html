@@ -1,202 +1,228 @@
 <!DOCTYPE html>
 <html>
-	<head>
-		<meta charset="UTF-8">
-		<title>js原生轮播</title>
-		<style type="text/css">
-		*{
-			margin: 0;
-			padding: 0;
-			font-family: "微软雅黑";
-		}
-		#btns{
-			text-align: center;
-			padding: 5px 0;
-		}
-		#showbox{
-			position:relative;
-			width: 900px;
-			height: 400px;
-			border:5px solid gold;
-			overflow: hidden;
-			margin: 20px auto;
-		}
-		#pics{
-			width: 8000px;
-			height:800px;
-			position: absolute;
-			left: 0;
-		    transition: left 0.5s;
-		    z-index: 1;
-		}
-		.pic{
-		font-size:100px;
-		line-height: 350px;
-		text-align: center;
-		width:900px;
-		height:800px;
-		float: left;
-		z-index: -1;
-		}
-		#pics> div:nth-child(1){
-		 	background-color: red;
-		}
-		#pics> div:nth-child(2){
-			background-color: greenyellow;
-		}
-		#pics> div:nth-child(3){
-			background-color: blue;
-		}
-		#pics> div:nth-child(4){
-			background-color: orange;
-		}
-		#pics> div:nth-child(5){
-				background-color: cyan;
-		}
-		#prev{
-			display: none;
-			float:left;
-			position:absolute;
-			z-index: 2;
-		}
-		#next{
-			display: none;
-			float:left;
-			position:absolute;
-			z-index: 2;
-			right:0;
-		}
-		.arrow{
-			text-decoration: none;
-			cursor: pointer;
-			font-size:50px;
-			line-height:75px ;
-			text-align: center; 
-			width: 50px;
-			height: 80px;  
-			top: 145px;
-			background-color: RGBA(0,0,0,.2); color: #fff;}
-		.arrow:hover{
-			background-color: RGBA(0,0,0,.7);
-		}
-		#swapButtons{
-			width: 170px;
-			height: 35px;
-			margin: 0 auto;
-			z-index:3;
-			position: absolute;
-			left:360px;
-			bottom:10px;
-		}
-		#showbox:hover #prev{ display: block;}
-		#showbox:hover #next{ display: block;}
-		#swapButtons div{;
-			width: 30px;
-			height: 30px;
-			background-color: RGBA(0,0,0,.2); 
-			color:#fff;
-			float: left;
-			margin: 2px;
-			text-align: center;
-			font: bold 20px/30px "microsoft yahei";
-			cursor: pointer;
-		}
-		#swapButtons div:hover{
-			background-color: RGBA(0,0,0,.7); 
-		}
-		#swapButtons .on{
-			background-color: RGBA(0,0,0,.7); 
-		}
-		</style>
-	</head>
-	<body>
-		
 
-		<div id="showbox">
-				
-				<div id="pics" style="left:0px">
-				<div class="pic">1</div>
-				<div class="pic">2</div>
-				<div class="pic">3</div>
-				<div class="pic">4</div>
-				<div class="pic">5</div>
-		</div>
-		<div id="swapButtons">
-		<div class="on">1</div>
-		<div>2</div>
-		<div>3</div>
-		<div>4</div>
-		<div>5</div>
-		</div>
-		<a href="javascript:; " id="prev" class="arrow">&lt;</a>
-		<a href="javascript:; " id="next" class="arrow">&gt;</a>
-		</div>
-<script type="text/javascript">
-//原生JS轮播
-//Powered By 白卓(heavenlywing@foxmail.com)
-window.onload=function(){
-	var showbox = document.getElementById('showbox');//获取整体
-	var pics = document.getElementById('pics');//获取图片区域
-	var swapButtons=document.querySelectorAll("#swapButtons div");
-	
-	
-	function swap(x){
-	var picsleft = parseInt(pics.style.left)+x;//获取当前left值并增加/减少偏移量
-	pics.style.left=picsleft+'px';//增加单位
-	if(picsleft==-4500){
-		pics.style.left=0+'px';
-	}//最后一张图时，下一张切回第一张
-    if(picsleft==900){
-    	pics.style.left=-3600+'px';
-    }//第一张图时，上一张切回最后一张
-	}
-	next.onclick=function(){
-		swap(-900);
-		showButton();
-	}//下一张点击事件
-	prev.onclick=function(){
-		swap(900);
-		showButton();
-	}//上一张点击事件
+<head>
+  <meta charset="UTF-8">
+  <title>js原生轮播</title>
+  <style type="text/css">
+    * {
+      margin: 0;
+      padding: 0;
+      font-family: "微软雅黑";
+    }
 
-	function play(){
-		timer = setInterval(function(){
-			next.onclick();
-		},2000);
-	}//播放事件
-	function stop(){
-		clearInterval(timer);
-	}//停止播放事件
-	showbox.onmouseout=play;//触发播放
-  	showbox.onmouseover=stop;//触发停止
- 	play();//默认播放
-	
-	function showButton(){//箭头触发按钮样式事件
-		var leftCount = ((parseInt(pics.style.left))/(-900));//根据偏移量计算出当前页码顺序
-		for (var i = 0; i < swapButtons.length; i++) {
-	 		swapButtons[i].className='';//清除其它按钮样式
-	 	}
-		swapButtons[leftCount].className='on';//添加激活样式
-	}
+    #btns {
+      text-align: center;
+      padding: 5px 0;
+    }
 
-	
-	for (var i = 0; i < swapButtons.length; i++) {//按钮点击改变样式事件
-		swapButtons[i].onclick=function(){
-			if(this.style.className=='on'){
-				return;
-			}//重复优化
-	 	for (var i = 0; i < swapButtons.length; i++) {
-	 		swapButtons[i].className='';//清除其它按钮样式
-	 	}
-		this.className='on';//添加激活样式
-		var oindex=parseInt(this.innerHTML);
-		pics.style.left=(oindex-1)*(-900)+'px';//根据按钮顺序设置偏移量
-		}
-	}
-		
-}
+    #showbox {
+      position: relative;
+      width: 900px;
+      height: 400px;
+      border: 5px solid gold;
+      overflow: hidden;
+      margin: 20px auto;
+    }
+
+    #pics {
+      width: 8000px;
+      height: 800px;
+      position: absolute;
+      left: 0;
+      transition: left 0.5s;
+      z-index: 1;
+    }
+
+    .pic {
+      font-size: 100px;
+      line-height: 350px;
+      text-align: center;
+      width: 900px;
+      height: 800px;
+      float: left;
+      z-index: -1;
+    }
+
+    #pics>div:nth-child(1) {
+      background-color: red;
+    }
+
+    #pics>div:nth-child(2) {
+      background-color: greenyellow;
+    }
+
+    #pics>div:nth-child(3) {
+      background-color: blue;
+    }
+
+    #pics>div:nth-child(4) {
+      background-color: orange;
+    }
+
+    #pics>div:nth-child(5) {
+      background-color: cyan;
+    }
+
+    #prev {
+      display: none;
+      float: left;
+      position: absolute;
+      z-index: 2;
+    }
+
+    #next {
+      display: none;
+      float: left;
+      position: absolute;
+      z-index: 2;
+      right: 0;
+    }
+
+    .arrow {
+      text-decoration: none;
+      cursor: pointer;
+      font-size: 50px;
+      line-height: 75px;
+      text-align: center;
+      width: 50px;
+      height: 80px;
+      top: 145px;
+      background-color: RGBA(0, 0, 0, .2);
+      color: #fff;
+    }
+
+    .arrow:hover {
+      background-color: RGBA(0, 0, 0, .7);
+    }
+
+    #swapButtons {
+      width: 170px;
+      height: 35px;
+      margin: 0 auto;
+      z-index: 3;
+      position: absolute;
+      left: 360px;
+      bottom: 10px;
+    }
+
+    #showbox:hover #prev {
+      display: block;
+    }
+
+    #showbox:hover #next {
+      display: block;
+    }
+
+    #swapButtons div {
+      width: 30px;
+      height: 30px;
+      background-color: RGBA(0, 0, 0, .2);
+      color: #fff;
+      float: left;
+      margin: 2px;
+      text-align: center;
+      font: bold 20px/30px "microsoft yahei";
+      cursor: pointer;
+    }
+
+    #swapButtons div:hover {
+      background-color: RGBA(0, 0, 0, .7);
+    }
+
+    #swapButtons .on {
+      background-color: RGBA(0, 0, 0, .7);
+    }
+  </style>
+</head>
+
+<body>
 
 
-</script>
-	</body>
+  <div id="showbox">
+
+    <div id="pics" style="left:0px">
+      <div class="pic">1</div>
+      <div class="pic">2</div>
+      <div class="pic">3</div>
+      <div class="pic">4</div>
+      <div class="pic">5</div>
+    </div>
+    <div id="swapButtons">
+      <div class="on">1</div>
+      <div>2</div>
+      <div>3</div>
+      <div>4</div>
+      <div>5</div>
+    </div>
+    <a href="javascript:; " id="prev" class="arrow">&lt;</a>
+    <a href="javascript:; " id="next" class="arrow">&gt;</a>
+  </div>
+  <script type="text/javascript">
+    //原生JS轮播
+    //Powered By 白卓(heavenlywing@foxmail.com)
+    window.onload = function () {
+      var showbox = document.getElementById('showbox'); //获取整体
+      var pics = document.getElementById('pics'); //获取图片区域
+      var swapButtons = document.querySelectorAll("#swapButtons div");
+
+
+      function swap(x) {
+        var picsleft = parseInt(pics.style.left) + x; //获取当前left值并增加/减少偏移量
+        pics.style.left = picsleft + 'px'; //增加单位
+        if (picsleft == -4500) {
+          pics.style.left = 0 + 'px';
+        } //最后一张图时，下一张切回第一张
+        if (picsleft == 900) {
+          pics.style.left = -3600 + 'px';
+        } //第一张图时，上一张切回最后一张
+      }
+      next.onclick = function () {
+        swap(-900);
+        showButton();
+      } //下一张点击事件
+      prev.onclick = function () {
+        swap(900);
+        showButton();
+      } //上一张点击事件
+
+      function play() {
+        timer = setInterval(function () {
+          next.onclick();
+        }, 2000);
+      } //播放事件
+      function stop() {
+        clearInterval(timer);
+      } //停止播放事件
+      showbox.onmouseout = play; //触发播放
+      showbox.onmouseover = stop; //触发停止
+      play(); //默认播放
+
+      function showButton() { //箭头触发按钮样式事件
+        var leftCount = ((parseInt(pics.style.left)) / (-900)); //根据偏移量计算出当前页码顺序
+        for (var i = 0; i < swapButtons.length; i++) {
+          swapButtons[i].className = ''; //清除其它按钮样式
+        }
+        swapButtons[leftCount].className = 'on'; //添加激活样式
+      }
+
+
+      for (var i = 0; i < swapButtons.length; i++) { //按钮点击改变样式事件
+        swapButtons[i].onclick = function () {
+          if (this.style.className == 'on') {
+            return;
+          } //重复优化
+          for (var i = 0; i < swapButtons.length; i++) {
+            swapButtons[i].className = ''; //清除其它按钮样式
+          }
+          this.className = 'on'; //添加激活样式
+          var oindex = parseInt(this.innerHTML);
+          pics.style.left = (oindex - 1) * (-900) + 'px'; //根据按钮顺序设置偏移量
+        }
+      }
+
+    }
+  </script>
+</body>
+
 </html>
